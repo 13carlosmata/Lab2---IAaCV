@@ -124,8 +124,42 @@ for i = 1:1:length(scale)
     overlaycurves(house, edgecurves);
     title(['Scale = ',num2str(scale(i)),'; threshold = ',num2str(threshold(i))]);
 end
+pause
 
 %% 6 Hough transform
+% Question 8 & 9
+% function input as houghedgeline(pic, scale, threshold, nrho, ntheta, nlines, n_smooth, verbose);
+% Using accumulator increment is letting the increment always be equal to one
+verbose = 2;
 
+%{
+% Tests
+testimage1 = triangle128;
+smalltest1 = binsubsample(testimage1);
+houghedgeline(smalltest1, 0.001, 10, 150, 180, 3, 0, verbose);
+pause
 
+testimage2 = houghtest256;
+smalltest2 = binsubsample(binsubsample(testimage2));
+houghedgeline(smalltest2, 1, 10, 150, 120, 13, 0, verbose);
+pause
+%}
+pic = few256;
+houghedgeline(pic, 4, 6, 300, 360, 25, 0, verbose);
+pause
+
+pic = phonecalc256;
+houghedgeline(pic, 16, 15, 150, 120, 20, 0, verbose);
+pause
+
+pic = godthem256;
+houghedgeline(pic, 8, 10, 300, 360, 30, 1, verbose);
+pause
+
+% Question 10
+% Using the gradient instead of the intensity of the image itself
+% Using accumulator increment is letting the increment to be the intensity
+% Repeat the above procedure with the following changes:
+% magnitude = pic; ->    magnitude = sqrt(Lv(pic,'same'));
+% pixel_val = 1;   ->    pixel_val = magnitude(round(x), round(y));
 
