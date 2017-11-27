@@ -56,11 +56,14 @@ suptitle('Study done with image few256');
 %%
 res_few = main_sections(few256,'few256');
 res_godthem = main_sections(godthem256,'godthem256');
-res_godthem_gauss = gaussfft(Lv(godthem256,'valid'),0.2);
+res_godthem_gauss = gaussfft(Lv(godthem256,'valid'),1);
+res_godthem_gauss_b = Lv(gaussfft(godthem256,1),'valid');
+
 
 figure;
-showgrey(res_godthem_gauss)
-title("Smoothing image with a Gaussian Filter")
+subplot(1,2,1); showgrey(res_godthem_gauss);
+subplot(1,2,2); showgrey(res_godthem_gauss_b);
+suptitle("Smoothing image with a Gaussian Filter - after")
 
 
 
