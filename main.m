@@ -63,7 +63,38 @@ res_godthem_gauss_b = Lv(gaussfft(godthem256,1),'valid');
 figure;
 subplot(1,2,1); showgrey(res_godthem_gauss);
 subplot(1,2,2); showgrey(res_godthem_gauss_b);
-suptitle("Smoothing image with a Gaussian Filter - after")
+suptitle('Smoothing image with a Gaussian Filter - after')
+
+%%     Computing differential geometry descriptors
+
+[x,y]  = meshgrid(-5:5, -5:5);
+[dxmask,dymask] = central_diff(1);
+[dxxmask,dyymask] = central_diff(2);
+
+dxxxmask = filter2(dxmask, dxxmask, 'same');
+dxymask  = filter2(dxmask, dymask, 'same');
+dxxymask = filter2(dxxmask,dymask, 'same');
+
+res_1 = filter2(dxxxmask, x .^3, 'valid');
+res_2 = filter2(dxxmask, x .^3, 'valid');
+res_3 = filter2(dxxymask, x .^2 .* y, 'valid');
+
+disp("Subcomponents - done - CHECK")
+
+house = godthem256;
+scales = [0.0001,1.0,4.0,16.0,64.0];
+figure;
+subplot(1,6,1);
+showgrey(house);
+for i=1:size(scales,2)
+    subplot(1,6,i+1);
+    contour(Lvvtilde(gaussfft(house, scales(i)), 'same'), [0 0]);
+    axis('image');    axis('ij');  
+    title(['Scale = ',int2str(scales(i))])
+end
+
+
+%%
 
 
 
