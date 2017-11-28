@@ -67,6 +67,9 @@ suptitle('Smoothing image with a Gaussian Filter - after')
 
 %%     Computing differential geometry descriptors
 
+%               -> Question 4
+
+
 [x,y]  = meshgrid(-5:5, -5:5);
 [dxmask,dymask] = central_diff(1);
 [dxxmask,dyymask] = central_diff(2);
@@ -86,6 +89,7 @@ scales = [0.0001,1.0,4.0,16.0,64.0];
 figure;
 subplot(1,6,1);
 showgrey(house);
+title('Original');
 for i=1:size(scales,2)
     subplot(1,6,i+1);
     contour(Lvvtilde(gaussfft(house, scales(i)), 'same'), [0 0]);
@@ -94,7 +98,24 @@ for i=1:size(scales,2)
 end
 
 
-%%
+%%              -> Question  5
+
+
+tools = few256;
+figure
+subplot(1,6,1);
+showgrey(tools);
+title('Original');
+for i=1:size(scales,2)
+    subplot(1,6,i+1);
+    showgrey(Lvvvtilde(gaussfft(tools, scales(i)), 'same') < 0)
+    axis('image');    axis('ij');  
+    title(['Scale = ',int2str(scales(i))])
+end
+
+
+%% Extraction of edge segments
+
 
 
 

@@ -13,7 +13,7 @@ Lxxx = filter2(dxxx, inpic, shape);
 Ly   = filter2(dy, inpic, shape);
 Lxxy = filter2(dxxy, inpic, shape);
 Lxyy = filter2(dxyy, inpic, shape);
-Lyyy = filtge2(dyyy, inpic, shape);
+Lyyy = filter2(dyyy, inpic, shape);
 
 res = Lx^3 .*Lxxx + 3.*Lx^2.*Ly.*Lxxy + 3.*Lx.*Ly^2.*Lxyy + Ly^3.*Lyyy;
 end
