@@ -74,9 +74,9 @@ suptitle('Smoothing image with a Gaussian Filter - after')
 [dxmask,dymask] = central_diff(1);
 [dxxmask,dyymask] = central_diff(2);
 
-dxxxmask = filter2(dxmask, dxxmask, 'same');
-dxymask  = filter2(dxmask, dymask, 'same');
-dxxymask = filter2(dxxmask,dymask, 'same');
+dxxxmask = conv2(dxmask, dxxmask, 'same');
+dxymask  = conv2(dxmask, dymask, 'same');
+dxxymask = conv2(dxxmask,dymask, 'same');
 
 res_1 = filter2(dxxxmask, x .^3, 'valid');
 res_2 = filter2(dxxmask, x .^3, 'valid');
@@ -114,17 +114,25 @@ end
 
 %% Extraction of edge segments
 
+thresholds = [1,10,50,70,100];
 figure
-subplot(1,6,1);
-showgrey(tools);
+subplot(5,6,1);
+showgrey(house);
 title('Original');
-for i=1:size(scales,2)
-    subplot(1,6,i+1);
-    edgecurves = extractedge(tools, scales(i), 5, 'same');
-    overlaycurves(tools,edgecurves);
-    axis('image');    axis('ij');  
-    title(['Scale = ',int2str(scales(i))])
+cont=1;
+for i=1:size(thresholds,2)
+    for j =1:size(scales,2)
+        cont=cont+1;
+        subplot(5,6,cont);
+        edgecurves = extractedge(house, scales(i), thresholds(j), 'same');
+        overlaycurves(house,edgecurves);
+        title(['Scale = ',int2str(scales(j)), '  TH =',int2str(thresholds(i))]);
+    end
+    cont=cont+1;
 end
+print("done")
+
+
 
 %%
 
