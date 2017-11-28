@@ -99,8 +99,6 @@ end
 
 
 %%              -> Question  5
-
-
 tools = few256;
 figure
 subplot(1,6,1);
@@ -116,8 +114,17 @@ end
 
 %% Extraction of edge segments
 
-
-
+figure
+subplot(1,6,1);
+showgrey(tools);
+title('Original');
+for i=1:size(scales,2)
+    subplot(1,6,i+1);
+    edgecurves = extractedge(tools, scales(i), 5, 'same');
+    overlaycurves(tools,edgecurves);
+    axis('image');    axis('ij');  
+    title(['Scale = ',int2str(scales(i))])
+end
 
 %%
 
