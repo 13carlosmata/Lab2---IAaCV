@@ -130,11 +130,23 @@ for i=1:size(thresholds,2)
     end
     cont=cont+1;
 end
-print("done")
+fprintf("done thresholds + Scales \n")
 
 
 
-%%
+%%  HOUGH Trasnform
+
+testimage1 = triangle128;
+smalltest1 = binsubsample(testimage1);
+
+testimage2 = houghtest256;
+smalltest2 = binsubsample(binsubsample(testimage2));
+
+houghline(smalltest1, 0.001, 10, 150, 180, 3, 0);
+1
+%% 
+
+
 
 function res = main_sections (image, name)
 tools = image;
