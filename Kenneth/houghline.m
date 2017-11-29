@@ -19,6 +19,10 @@ diag = sqrt((size(magnitude,1)-1)^2+(size(magnitude,2)-1)^2);
 rho_axis = linspace(-diag,diag,nrho);
 theta_axis = linspace(-pi/2,pi/2,ntheta);
 
+%  Give the gradient magnitude as an argument for houghline
+pic = magnitude;
+magnitude = sqrt(Lv(magnitude,'same'));
+
 % Loop over all the input curves
 insize = size(curves,2);
 trypointer = 1;
@@ -92,7 +96,7 @@ for idx = 1:nlines
     
     % Overlay these curves on the gradient magnitude image
     if (show_img)
-        overlaycurves(magnitude, outcurves);  title('Hough Edge Lines');
+        overlaycurves(pic, outcurves);  title('Hough Edge Lines');
     end
 end
 
