@@ -37,55 +37,69 @@ res_2 = filter2(dxxmask, x .^3, 'valid');
 res_3 = filter2(dxxymask, x .^2 .* y, 'valid');
 
 house = godthem256;
-scales = [0.0001,1.0,4.0,16.0,64.0];
+scale = [0.0001,1.0,4.0,16.0,64.0];
+
 figure;
-subplot(1,6,1);
+subplot(2,3,1);
 showgrey(house);
 title('Original');
-for i=1:size(scales,2)
-    subplot(1,6,i+1);
-    contour(Lvvtilde(gaussfft(house, scales(i)), 'same'), [0 0]);
+for i=1:size(scale,2)
+    subplot(2,3,i+1);
+    contour(Lvvtilde(gaussfft(house, scale(i)), 'same'), [0 0]);
     axis('image');    axis('ij');  
-    title(['Scale = ',int2str(scales(i))])
+    title(['Scale = ',int2str(scale(i))])
 end
 
-%%
-% %%              -> Question  5
-% tools = few256;
-% figure
-% subplot(1,6,1);
-% showgrey(tools);
-% title('Original');
-% for i=1:size(scales,2)
-%     subplot(1,6,i+1);
-%     showgrey(Lvvvtilde(gaussfft(tools, scales(i)), 'same') < 0)
-%     axis('image');    axis('ij');  
-%     title(['Scale = ',int2str(scales(i))])
-% end
-% 
-% 
-% %% Extraction of edge segments
-% 
-% thresholds = [1,10,50,70,100];
-% figure
-% subplot(5,6,1);
-% showgrey(house);
-% title('Original');
-% cont=1;
-% for i=1:size(thresholds,2)
-%     for j =1:size(scales,2)
-%         cont=cont+1;
-%         subplot(5,6,cont);
-%         edgecurves = extractedge(house, scales(i), thresholds(j), 'same');
-%         overlaycurves(house,edgecurves);
-%         title(['Scale = ',int2str(scales(j)), '  TH =',int2str(thresholds(i))]);
-%     end
-%     cont=cont+1;
-% end
-% fprintf("done thresholds + Scales \n")
-% 
-% 
-% 
+%% Question 5 and 6         
+tools = few256;
+figure
+subplot(2,3,1);
+showgrey(tools);
+title('Original');
+for i=1:size(scale,2)
+    subplot(2,3,i+1);
+    showgrey(Lvvvtilde(gaussfft(tools, scale(i)), 'same') < 0)
+    axis('image');    axis('ij');  
+    title(['Scale = ',int2str(scale(i))])
+end
+
+
+%% Question 7       
+
+threshold = [1,10,50,70,100];
+figure
+subplot(5,6,1);
+showgrey(house);
+title('Original');
+cont=1;
+for i=1:size(threshold,2)
+    for j =1:size(scale,2)
+        cont=cont+1;
+        subplot(5,6,cont);
+        edgecurves = extractedge(house, scale(j), threshold(i), 'same');
+        overlaycurves(house,edgecurves);
+        title(['Scale = ',int2str(scale(j)), '  TH =',int2str(threshold(i))]);
+    end
+    cont=cont+1;
+end
+fprintf("done thresholds + Scales \n");
+                                        
+% Best Fits
+figure
+subplot(1,3,1); 
+edgecurves = extractedge(house, 30, 10, 'same');    overlaycurves(house,edgecurves);
+title(['Scale = ',int2str(30), '  TH =',int2str(10)]);
+
+subplot(1,3,2); 
+edgecurves = extractedge(house, 4, 100, 'same');   overlaycurves(house,edgecurves);
+title(['Scale = ',int2str(4), '  TH =',int2str(100)]);
+
+subplot(1,3,3); 
+edgecurves = extractedge(house, 10, 100, 'same');    overlaycurves(house,edgecurves);
+title(['Scale = ',int2str(10), '  TH =',int2str(100)]);
+
+suptitle('Best Fits')
+%% 
 % %%  HOUGH Trasnform
 % 
 % testimage1 = triangle128;
