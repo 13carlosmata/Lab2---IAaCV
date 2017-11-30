@@ -67,7 +67,6 @@ end
 %% Question 7       
 
 threshold = [1,10,50,70,100];
-figure
 subplot(5,6,1);
 showgrey(house);
 title('Original');
@@ -97,39 +96,32 @@ title(['Scale = ',int2str(4), '  TH =',int2str(100)]);
 subplot(1,3,3); 
 edgecurves = extractedge(house, 10, 100, 'same');    overlaycurves(house,edgecurves);
 title(['Scale = ',int2str(10), '  TH =',int2str(100)]);
-
 suptitle('Best Fits')
+ 
+%%  HOUGH Trasnform
+
+testimage1 = triangle128;
+smalltest1 = binsubsample(testimage1);
+testimage2 = houghtest256;
+smalltest2 = binsubsample(binsubsample(testimage2));
+
+testimage = testimage2;
+
+magnitude = testimage;
+nrho = size(magnitude,1);
+ntheta = size(magnitude,2);
+threshold = 6;
+scale = 7;
+nlines = 10;
+verbose = 0;
+
+curves = extractedge(testimage, scale, threshold, 'same');
+%overlaycurves(testimage,curves);
+
+[linepar, acc] = houghline(curves, magnitude,nrho, ntheta, threshold, nlines);
+
+%houghedgeline(testimage, scale, threshold, nrho, ntheta, nlines,0);
 %% 
-% %%  HOUGH Trasnform
-% 
-% testimage1 = triangle128;
-% smalltest1 = binsubsample(testimage1);
-% testimage2 = houghtest256;
-% smalltest2 = binsubsample(binsubsample(testimage2));
-% 
-% 
-% testimage = tools;
-% 
-% [dx,dy] = central_diff(1);
-% dx = conv2(testimage, dx, 'valid');
-% dy = conv2(testimage, dy, 'valid');
-% 
-% 
-% magnitude = sqrt(dx .^2 + dy.^2);
-% nrho = size(magnitude,1);
-% ntheta = size(magnitude,2);
-% threshold = 50;
-% scale = 4;
-% nlines = 10;
-% verbose = 0;
-% 
-% curves = extractedge(testimage, scale, threshold, 'same');
-% overlaycurves(testimage,curves);
-% 
-% 
-% [linepar, acc] = houghline(curves, magnitude,nrho, ntheta, threshold, nlines, verbose);
-% %houghedgeline(testimage, scale, threshold, nrho, ntheta, nlines,2);
-% %% 
 
 
 

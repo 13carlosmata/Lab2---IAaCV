@@ -1,16 +1,17 @@
-function [linepar, acc] = houghline(curves, magnitude,nrho, ntheta, threshold, nlines, verbose)
-%% Check if input appear to be valid
+function [linepar, acc] = houghline(curves, magnitude,nrho, ntheta, threshold, nlines)
+picture = magnitude;
+% Check if input appear to be valid
 if (nrho <= 0 || ntheta <=0 || threshold < 0 || nlines <=0)
     error(' Check the inputs in Houghlune, inputs are not valid !!'); 
 end
-%% Allocate accumulator space
+% Allocate accumulator space
 acc = zeros(nrho,ntheta);
-%% Define a coordinate system in the accumulator space
+% Define a coordinate system in the accumulator space
 diag = sqrt((size(magnitude,1)-1)^2+(size(magnitude,2)-1)^2);
 
 rho_space = linspace(-diag,diag,nrho);
 theta_space = linspace(-pi/2,pi/2,ntheta);
-%% Loop over all the input curves (cf. pixelplotcurves) for each point on each curve
+% Loop over all the input curves (cf. pixelplotcurves) for each point on each curve
 
 insize = size(curves, 2);
 trypointer = 1;
@@ -31,7 +32,7 @@ while trypointer <= insize
                 value_pixel = magnitude(round(x),round(y));
                 %Loop over a set of theta values
                 for theta=1:ntheta
-                    rho = x*cos(theta)+ y*sin(theta);
+                    rho = x*cos(theta_space(theta))+ y*sin(theta_space(theta));
                     % Compute index values in the accumulator space
                     rho_idx = 1+floor((diag+rho)/((2*diag)/(nrho-1)));
                     % Update the accumulator
@@ -43,21 +44,23 @@ while trypointer <= insize
     end
 end
 
-%% Delimit the number of responses if necessary
+% Delimit the number of responses if necessary
 
-acc = binsepsmoothiter(acc, 0.1, 10);
+acc = binsepsmoothiter(acc, 0.1, 0);
+
+% Extract local maxima from the accumulator
 
 linepar = zeros(2,nlines);
 [pos, value] = locmax8(acc);
 [dummy, indexvector] = sort(value);
 nmaxima = size(value, 1);
-
 for idx = 1:nlines
     rhoidxacc = pos(indexvector(nmaxima - idx + 1), 1);
     thetaidxacc = pos(indexvector(nmaxima - idx + 1), 2);
     linepar(:,idx) = [rho_space(rhoidxacc), theta_space(thetaidxacc)]'; 
 end
-%% Compute a line for each one of the strongest responses in the accumulator
+
+% Compute a line for each one of the strongest responses in the accumulator
 
 outcurves = zeros(2,4*nlines);
 for idx = 1:nlines
@@ -74,7 +77,7 @@ for idx = 1:nlines
         dy = size(magnitude,2)/2;
         dx = -tan(theta) * dy;
     end
-    %outcurves(1, 4*(idx-1) + 1) = 0; % level, not significant
+    outcurves(1, 4*(idx-1) + 1) = 0; % level, not significant
     outcurves(2, 4*(idx-1) + 1) = 3; % number of points in the curve
     outcurves(2, 4*(idx-1) + 2) = x0-dx;
     outcurves(1, 4*(idx-1) + 2) = y0-dy;
@@ -82,9 +85,10 @@ for idx = 1:nlines
     outcurves(1, 4*(idx-1) + 3) = y0;
     outcurves(2, 4*(idx-1) + 4) = x0+dx;
     outcurves(1, 4*(idx-1) + 4) = y0+dy;
-%% Overlay these curves on the gradient magnitude image
+
 end
-overlaycurves(magnitude, outcurves)
+% Overlay these curves on the gradient magnitude image
+overlaycurves(picture, outcurves);
 end
 
 
