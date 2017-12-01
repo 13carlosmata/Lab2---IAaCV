@@ -1,4 +1,4 @@
-function [linepar, acc] = houghline(curves, magnitude,nrho, ntheta, threshold, nlines)
+function [linepar, acc] = houghline(curves, magnitude,nrho, ntheta, threshold, nlines, verbose)
 picture = magnitude;
 % Check if input appear to be valid
 if (nrho <= 0 || ntheta <=0 || threshold < 0 || nlines <=0)
@@ -28,7 +28,7 @@ while trypointer <= insize
         if (r_x < nrho && r_y < ntheta)
             if (magnitude(r_x,r_y) > threshold)
                 %Optionally, keep value from magnitude imag
-                magnitude(round(x),round(y)) = 1;
+                %magnitude(round(x),round(y)) = 1;
                 value_pixel = magnitude(round(x),round(y));
                 %Loop over a set of theta values
                 for theta=1:ntheta
@@ -36,7 +36,11 @@ while trypointer <= insize
                     % Compute index values in the accumulator space
                     rho_idx = 1+floor((diag+rho)/((2*diag)/(nrho-1)));
                     % Update the accumulator
-                    acc(rho_idx,theta) = acc(rho_idx,theta) + value_pixel;
+                    if verbose > 0
+                        acc(rho_idx,theta) = acc(rho_idx,theta) + magnitude(round(x),round(y));
+                    elseif verbose == 0
+                        acc(rho_idx,theta) = acc(rho_idx,theta) + 1;
+                    end
                 end
             end
         end
@@ -54,6 +58,7 @@ linepar = zeros(2,nlines);
 [pos, value] = locmax8(acc);
 [dummy, indexvector] = sort(value);
 nmaxima = size(value, 1);
+
 for idx = 1:nlines
     rhoidxacc = pos(indexvector(nmaxima - idx + 1), 1);
     thetaidxacc = pos(indexvector(nmaxima - idx + 1), 2);
@@ -88,7 +93,10 @@ for idx = 1:nlines
 
 end
 % Overlay these curves on the gradient magnitude image
-overlaycurves(picture, outcurves);
+if verbose == 2
+    overlaycurves(linepar, outcurves);
+elseif verbose ~= 2
+    overlaycurves(picture, outcurves); 
 end
 
 

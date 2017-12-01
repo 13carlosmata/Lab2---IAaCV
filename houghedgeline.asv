@@ -50,6 +50,6 @@ elseif verbose == 3
     [linepar, acc] = houghline(curves, magnitude,nrho, ntheta, threshold, nlines,1);
     title("Gradient in the accumulator")
 end
-suptitle(['Scale: ',int2str(scale), ' Treshold: ', int2str(threshold), ' nlines: ', int2str(nlines), ' ', int2str(nrho), 'x', int2str(ntheta)]);    
+suptitle(['Scale: ',int2str(scale), ' Treshold: ', int2str(threshold), ' nlines: ', int2str(nlines), ''])    
 
 end

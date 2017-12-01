@@ -98,32 +98,59 @@ edgecurves = extractedge(house, 10, 100, 'same');    overlaycurves(house,edgecur
 title(['Scale = ',int2str(10), '  TH =',int2str(100)]);
 suptitle('Best Fits')
  
-%%  HOUGH Trasnform
+%%  Question 8 - HOUGH Trasnform
 
 testimage1 = triangle128;
 smalltest1 = binsubsample(testimage1);
 testimage2 = houghtest256;
 smalltest2 = binsubsample(binsubsample(testimage2));
 
-testimage = testimage2;
-
-magnitude = testimage;
-nrho = size(magnitude,1);
-ntheta = size(magnitude,2);
-threshold = 6;
-scale = 7;
+% test 1
+pic = testimage1;
+nrho = size(pic,1);
+ntheta = size(pic,2);
+threshold = 5;
+scale = 1;
+nlines = 5;
+houghedgeline(pic, scale, threshold, nrho, ntheta, nlines,0);
+% test 2
+pic = testimage2;
+nrho = size(pic,1);
+ntheta = size(pic,2);
+threshold = 20;
+scale = 10;
 nlines = 10;
-verbose = 0;
+houghedgeline(pic, scale, threshold, nrho, ntheta, nlines,0);
+% test 3
+pic = tools;
+nrho = size(pic,1);
+ntheta = size(pic,2);
+threshold = 20;
+scale = 10;
+nlines = 20;
+houghedgeline(pic, scale, threshold, nrho, ntheta, nlines,1);
+% test 4
+pic = phonecalc256;
+nrho = size(pic,1);
+ntheta = size(pic,2);
+threshold = 70;
+scale = 4;
+nlines = 20;
+houghedgeline(pic, scale, threshold, nrho, ntheta, nlines,0);
+% test 5
+pic = house;
+nrho = size(pic,1);
+ntheta = size(pic,2);
+threshold = 20;
+scale = 10;
+nlines = 20;
+houghedgeline(pic, scale, threshold, nrho, ntheta, nlines,1);
+% test 6 - Question 10
+houghedgeline(tools, scale, threshold, nrho, ntheta, nlines,3);
+houghedgeline(house, scale, threshold, nrho, ntheta, nlines,3);
+houghedgeline(testimage2, scale, threshold, nrho, ntheta, nlines,3);
 
-curves = extractedge(testimage, scale, threshold, 'same');
-%overlaycurves(testimage,curves);
-
-[linepar, acc] = houghline(curves, magnitude,nrho, ntheta, threshold, nlines);
-
-%houghedgeline(testimage, scale, threshold, nrho, ntheta, nlines,0);
-%% 
-
-
+%%
 
 function res = main_sections (image, name)
 tools = image;
