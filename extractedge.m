@@ -8,8 +8,8 @@ end
 Lvi   = Lv(gaussfft(inpic,scale),shape);
 Lvv  = Lvvtilde(gaussfft(inpic, scale), shape);
 Lvvv = Lvvvtilde(gaussfft(inpic, scale), shape); 
-
+c=figure;
 curves_zeros = zerocrosscurves(Lvv, (Lvvv<0)-1);
 edgecurves = thresholdcurves(curves_zeros, (Lvi>threshold)-1);
-
+close(c);
 end

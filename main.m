@@ -81,7 +81,6 @@ for i=1:size(threshold,2)
     end
     cont=cont+1;
 end
-fprintf("done thresholds + Scales \n");
                                         
 % Best Fits
 figure
@@ -178,9 +177,7 @@ dxtoolsconv = dxtools_sobel;
 dytoolsconv = dytools_sobel;
 
 gradmagntools = sqrt(dxtoolsconv .^2 + dytoolsconv.^2);
-fprintf("Using image: ", name);
-fprintf('Values for grandmagntools: \n');
-fprintf(' %f',gradmagntools); fprintf('\n');
+
 res = gradmagntools;
 figure
 subplot(1,4,1); 
